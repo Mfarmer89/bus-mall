@@ -1,8 +1,10 @@
 "use strict";
 
 let numberOfImages = 3;
-let rounds = 25;
+let rounds = 5;
 let productImages = [];
+let chartArrayLabels = [];
+let chartArrayClicks = [];
 let flexBox = document.getElementById("flex-box");
 let images = [
   ["bag", "bag", "img/bag.jpg"],
@@ -90,30 +92,82 @@ let displayResults = function() {
     liEl.innerHTML = `${productImages[i].timesClicked} votes for the ${productImages[i].name}, which was displayed ${productImages[i].timesShown} times`;
     ulEl.appendChild(liEl);
   }
+  createChart();
 };
-
-
-
 
 //Event handler
 function handleVote(event) {
   if (rounds >0) {
     const imageIndex = event.target.getAttribute("data-number");
     productImages[imageIndex].timesClicked += 1;
+    console.log(productImages[imageIndex].timesClicked);
     document.getElementById("flex-box").innerHTML = "";
     createDivs(numberOfImages);
     rounds -= 1;
-    console.log(rounds);
   } else {
     document.getElementById("flex-box").innerHTML = "";
+    //Create arrays for Chart
+    for (let i = 0; i < productImages.length; i++) {
+      let pName = productImages[i].name;
+      chartArrayLabels.push(pName);
+      let pClick = productImages[i].timesClicked;
+      console.log(productImages[i].timesClicked);
+      console.log(pClick);
+      chartArrayClicks.push(pClick);
+    }
+    console.log(chartArrayClicks);
+
     displayResults();
   }
 }
-
 
 //calling function to create product objects
 createProductObjects();
 //calling function to run test
 createDivs(numberOfImages);
 
-console.log({productImages});
+
+//Canvas
+let createChart = function () {
+  var canvas = document.getElementById("barChart");
+  var ctx = canvas.getContext("2d");
+  console.log(newA)
+  new Chart (ctx, {
+    type: "bar",
+    data: {
+      title:{
+        text: "Most Liked Ads"
+      },
+      labels: chartArrayLabels, //this.ProductImages.name
+      datasets: [{
+        label: "Number of Likes",
+        data: chartArrayClicks, //this.productImages.timesClicked
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(255, 159, 64, 0.2)"
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(255, 99, 132, 1)",
+          "rgba(255, 99, 132, 1)",
+          "rgba(255, 99, 132, 1)",
+          "rgba(255, 159, 64, 1)"
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+};
+
