@@ -1,5 +1,7 @@
 "use strict";
 
+let numberOfImages = 3;
+let rounds = 25;
 let productImages = [];
 let flexBox = document.getElementById("flex-box");
 let images = [
@@ -30,8 +32,8 @@ function ProductImage(htmlId, name, filePath) {
   this.htmlId = htmlId;
   this.name = name;
   this.filePath = filePath;
-  // this.timesShown = timesShown;
-  // this.timesClicked = timesClicked;
+  this.timesShown = 0;
+  this.timesClicked = 0;
   productImages.push(this);
 }
 
@@ -56,34 +58,62 @@ let randomArray = function(numberOfImages) {
   return randomNumbers;
 };
 
-let createImage = function (iSrc, iAlt) {
+//Function to create image elements
+let createImage = function (iSrc, iAlt, indexN) {
   let img = document.createElement("img");
   img.setAttribute("src", iSrc);
   img.setAttribute("alt", iAlt);
+  img.setAttribute("data-number", indexN);
+  img.addEventListener("click", handleVote);
   return img;
 };
 
-//Function to create number of divs desired inline
+//Function to create divs with images
 let createDivs = function(numberOfImages) {
   let position = randomArray(numberOfImages);
   for(let i = 0; i < numberOfImages; i++) {
     let newDiv = document.createElement("div");
     newDiv.setAttribute("class", "flex-one");
-    console.log(position[i]);
-    console.log(productImages[position[i]]);
-    console.log(productImages);
-    let img = createImage(productImages[position[i]].filePath,productImages[position[i]].name);
+    let img = createImage(productImages[position[i]].filePath,productImages[position[i]].name, position[i]);
+    productImages[position[i]].timesShown +=1;
     newDiv.appendChild(img);
     flexBox.appendChild(newDiv);
   }
 };
 
+//function to display results
+let displayResults = function() {
+  // document.getElementByTagName("h2").innerHTML = "Results:";
+  let ulEl = document.getElementById("results");
+  for (let i = 0; i < productImages.length; i++) {
+    let liEl = document.createElement("li");
+    liEl.innerHTML = `${productImages[i].timesClicked} votes for the ${productImages[i].name}, which was displayed ${productImages[i].timesShown} times`;
+    ulEl.appendChild(liEl);
+  }
+};
+
+
+
+
+//Event handler
+function handleVote(event) {
+  if (rounds >0) {
+    const imageIndex = event.target.getAttribute("data-number");
+    productImages[imageIndex].timesClicked += 1;
+    document.getElementById("flex-box").innerHTML = "";
+    createDivs(numberOfImages);
+    rounds -= 1;
+    console.log(rounds);
+  } else {
+    document.getElementById("flex-box").innerHTML = "";
+    displayResults();
+  }
+}
 
 
 //calling function to create product objects
 createProductObjects();
-//calling function to create 3 inline divs
-createDivs(3);
+//calling function to run test
+createDivs(numberOfImages);
 
-
-
+console.log({productImages});
