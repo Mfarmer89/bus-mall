@@ -1,7 +1,7 @@
 "use strict";
 
 let numberOfImages = 3;
-let rounds = 5;
+let rounds = 25;
 let productImages = [];
 let chartArrayLabels = [];
 let chartArrayClicks = [];
@@ -85,7 +85,7 @@ let createDivs = function(numberOfImages) {
 
 //function to display results
 let displayResults = function() {
-  // document.getElementByTagName("h2").innerHTML = "Results:";
+  document.getElementsByTagName("h2")[0].innerHTML = "Results:";
   let ulEl = document.getElementById("results");
   for (let i = 0; i < productImages.length; i++) {
     let liEl = document.createElement("li");
@@ -116,7 +116,7 @@ function handleVote(event) {
       chartArrayClicks.push(pClick);
     }
     console.log(chartArrayClicks);
-
+    createChart();
     displayResults();
   }
 }
@@ -131,7 +131,6 @@ createDivs(numberOfImages);
 let createChart = function () {
   var canvas = document.getElementById("barChart");
   var ctx = canvas.getContext("2d");
-  console.log(newA)
   new Chart (ctx, {
     type: "bar",
     data: {
@@ -143,18 +142,29 @@ let createChart = function () {
         label: "Number of Likes",
         data: chartArrayClicks, //this.productImages.timesClicked
         backgroundColor: [
+          "rgba(99, 99, 255, 0.2)",
           "rgba(255, 99, 132, 0.2)",
+          "rgba(99, 99, 255, 0.2)",
           "rgba(255, 99, 132, 0.2)",
+          "rgba(99, 99, 255, 0.2)",
           "rgba(255, 99, 132, 0.2)",
+          "rgba(99, 99, 255, 0.2)",
           "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 159, 64, 0.2)"
+          "rgba(99, 99, 255, 0.2)",
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(99, 99, 255, 0.2)",
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(99, 99, 255, 0.2)",
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(99, 99, 255, 0.2)",
+          "rgba(255, 99, 132, 0.2)"
         ],
         borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(255, 99, 132, 1)",
-          "rgba(255, 99, 132, 1)",
-          "rgba(255, 99, 132, 1)",
-          "rgba(255, 159, 64, 1)"
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)"
         ],
         borderWidth: 1
       }]
