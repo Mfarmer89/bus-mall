@@ -116,7 +116,7 @@ function handleVote(event) {
       chartArrayClicks.push(pClick);
     }
     console.log(chartArrayClicks);
-
+    createChart();
     displayResults();
   }
 }
@@ -131,7 +131,6 @@ createDivs(numberOfImages);
 let createChart = function () {
   var canvas = document.getElementById("barChart");
   var ctx = canvas.getContext("2d");
-  console.log(newA)
   new Chart (ctx, {
     type: "bar",
     data: {
