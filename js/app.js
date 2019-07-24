@@ -1,10 +1,10 @@
 "use strict";
-
+/* global Chart */
 let numberOfImages = 3;
-let rounds = 25;
+let rounds = 5;
 let productImages = [];
-let chartArrayLabels = [];
-let chartArrayClicks = [];
+let chartArrayLabels = JSON.parse(localStorage.getItem("previousLabels")) || [];
+let chartArrayClicks = JSON.parse(localStorage.getItem("previousClicks")) || [];
 let flexBox = document.getElementById("flex-box");
 let images = [
   ["bag", "bag", "img/bag.jpg"],
@@ -95,12 +95,17 @@ let displayResults = function() {
   createChart();
 };
 
+//Function to store last chart data in local storage
+function storeData() {
+  localStorage.setItem("previousLabels", JSON.stringify(chartArrayLabels));
+  localStorage.setItem("previousClicks", JSON.stringify(chartArrayClicks));
+}
+
 //Event handler
 function handleVote(event) {
   if (rounds >0) {
     const imageIndex = event.target.getAttribute("data-number");
     productImages[imageIndex].timesClicked += 1;
-    console.log(productImages[imageIndex].timesClicked);
     document.getElementById("flex-box").innerHTML = "";
     createDivs(numberOfImages);
     rounds -= 1;
@@ -111,14 +116,12 @@ function handleVote(event) {
       let pName = productImages[i].name;
       chartArrayLabels.push(pName);
       let pClick = productImages[i].timesClicked;
-      console.log(productImages[i].timesClicked);
-      console.log(pClick);
       chartArrayClicks.push(pClick);
     }
-    console.log(chartArrayClicks);
     createChart();
     displayResults();
   }
+  storeData();
 }
 
 //calling function to create product objects
@@ -126,9 +129,16 @@ createProductObjects();
 //calling function to run test
 createDivs(numberOfImages);
 
+//Clear button
+let clearButton = document.getElementById("clearStorageButton");
+clearButton.addEventListener("click", function() {
+  localStorage.clear();
+});
 
 //Canvas
 let createChart = function () {
+  //var canvas = document.getElementById("barChart");
+  //clear canvas
   var canvas = document.getElementById("barChart");
   var ctx = canvas.getContext("2d");
   new Chart (ctx, {
@@ -137,35 +147,12 @@ let createChart = function () {
       title:{
         text: "Most Liked Ads"
       },
-      labels: chartArrayLabels, //this.ProductImages.name
+      labels: chartArrayLabels, 
       datasets: [{
         label: "Number of Likes",
-        data: chartArrayClicks, //this.productImages.timesClicked
-        backgroundColor: [
-          "rgba(99, 99, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(99, 99, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(99, 99, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(99, 99, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(99, 99, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(99, 99, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(99, 99, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(99, 99, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)"
-        ],
-        borderColor: [
-          "rgba(255, 255, 255, 1)",
-          "rgba(255, 255, 255, 1)",
-          "rgba(255, 255, 255, 1)",
-          "rgba(255, 255, 255, 1)",
-          "rgba(255, 255, 255, 1)"
-        ],
+        data: chartArrayClicks, 
+        backgroundColor: "rgba(99, 99, 255, 0.5)",
+        borderColor: "rgba(99, 99, 255, 1)",
         borderWidth: 1
       }]
     },
@@ -181,3 +168,4 @@ let createChart = function () {
   });
 };
 
+createChart();
