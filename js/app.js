@@ -1,7 +1,7 @@
 "use strict";
 /* global Chart */
 let numberOfImages = 3;
-let rounds = 5;
+let rounds = 25;
 let productImages = [];
 let chartArrayLabels = JSON.parse(localStorage.getItem("previousLabels")) || [];
 let chartArrayClicks = JSON.parse(localStorage.getItem("previousClicks")) || [];
